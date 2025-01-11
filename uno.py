@@ -218,11 +218,11 @@ def choose_number_of_players():
     # Ask the user how many players and what type
     while True:
         try:
-            num_players = int(input("How many players do you want to play with (1-4)? "))
-            if 1 <= num_players <= 4:
+            num_players = int(input("How many players do you want to play with (1-3)? "))
+            if 1 <= num_players <= 3:
                 break
             else:
-                print("Please enter a number between 1 and 4.")
+                print("Please enter a number between 1 and 3.")
         except ValueError:
             print("Invalid input. Please enter a number.")
     
