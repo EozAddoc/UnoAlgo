@@ -24,12 +24,10 @@ def ask_number_of_players(screen, clock):
         # Clear the screen
         screen.fill(WHITE)
 
-        # Display the question with dynamic positioning
         text_1 = FONT_MEDIUM.render("How many players?", True, BLACK)
         text_1_rect = text_1.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
         screen.blit(text_1, text_1_rect)
 
-        # Display the input box with dynamic size
         input_box_width, input_box_height = 200, 50
         pygame.draw.rect(screen, BLACK, (SCREEN_WIDTH // 2 - input_box_width // 2, SCREEN_HEIGHT // 2, input_box_width, input_box_height), 2)
         text_2 = FONT_MEDIUM.render(user_input, True, BLACK)
@@ -126,7 +124,6 @@ def ask_type_of_players(num, screen, clock):
         option_3_text = font.render("3", True, BLACK)
         screen.blit(option_3_text, (ai_options["3"].x + 10, ai_options["3"].y + 10))
 
-        # Display Human options (1, 2, 3)
         option_0_text_hum = font.render("0", True, BLACK)
         screen.blit(option_0_text_hum, (hum_options["0"].x + 10, hum_options["0"].y + 10))
 

@@ -113,7 +113,7 @@ def display_game_state(players, discard_pile, current_player):
                 print(f"{player.name} has {len(player.hand)} cards.")
 
 # Gameplay Functions
-def handle_turn(player, discard_pile, deck, players, current_player_index, reverse_order, stacked,ai):
+def handle_turn(player, discard_pile, deck, players, current_player_index, reverse_order, stacked,ai,drawn=False):
     print(f"\n{player.name}'s turn.", stacked )
     print(f"Active stack: {stacked} cards." if stacked > 0 else "")
     #ai
@@ -145,18 +145,19 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
         valid_moves = player.valid_moves(discard_pile.top_card)
         print("Valid moves: " + ", ".join(str(card) for card in valid_moves) + " or 'draw'.")
 
-        choice = input("Choose a card or type 'draw': ")
-        parts = choice.split()
-        parts.append("")
-        
         if stacked > 0 and parts[1] not in ["+2", "+4"]:
             print(f"You draw {stacked} cards due to the stack!")
             for _ in range(stacked):
                 player.draw(deck)
             stacked = 0  
-        elif choice == "draw":
+        choice = input("Choose a card or type 'draw': ")
+        parts = choice.split()
+        parts.append("")
+        if choice == "draw":
             player.draw(deck)
             print(f"You drew a card. Your hand now: {', '.join(str(card) for card in player.hand)}")
+            if drawn == False:
+                handle_turn(player, discard_pile, deck, players, current_player_index, reverse_order, stacked,ai,drawn=True)
         else:
             card = next((card for card in valid_moves if str(card) == choice), None)
             if card:
@@ -185,7 +186,7 @@ def handle_special_cards(card, players, current_player_index, reverse_order, dis
             print(f"{card} played 'Reverse'. Turn order reversed.")
     elif card.value == "+2": 
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]
-        print(f"{players[current_player_index]} played '+2'")
+        print(f" played '+2'")
         stacked += 2
     elif card.value == "+4":  
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]

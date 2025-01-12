@@ -69,6 +69,5 @@ def display_other_players(players, screen):
 def display_discard_pile(discard_pile, screen):
     font = pygame.font.SysFont('Arial', 30)
 
-    # Display the top card of the discard pile
     top_card_text = font.render(f"Discard Pile: {str(discard_pile.top_card)}", True, BLACK)
     screen.blit(top_card_text, (SCREEN_WIDTH // 2 - 150, 50))
