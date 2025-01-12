@@ -1,8 +1,8 @@
 # settings.py
 
 # Screen settings
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
 
 # Colors
 WHITE = (255, 255, 255)

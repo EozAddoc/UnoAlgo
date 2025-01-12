@@ -171,14 +171,18 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
 
 
 def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai):
-    if card.value == ">>":  # Skip
+    if card.value == ">>":  
         print(f"{card} played 'Skip'. Skipping next player's turn.")
         step = -1 if reverse_order else 1
         current_player_index = (current_player_index + step) % len(players)
 
     elif card.value == "<>": 
-        reverse_order = not reverse_order
-        print(f"{card} played 'Reverse'. Turn order reversed.")
+        if len(players) == 2:  
+            step = -1 if reverse_order else 1
+            current_player_index = (current_player_index + step) % len(players)
+        else:
+            reverse_order = not reverse_order
+            print(f"{card} played 'Reverse'. Turn order reversed.")
     elif card.value == "+2": 
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]
         print(f"{players[current_player_index]} played '+2'")
@@ -215,7 +219,6 @@ def choose_color(card, discard_pile,ai, current_player):
 
     
 def choose_number_of_players():
-    # Ask the user how many players and what type
     while True:
         try:
             num_players = int(input("How many players do you want to play with (1-3)? "))
