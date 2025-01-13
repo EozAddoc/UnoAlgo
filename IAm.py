@@ -42,7 +42,7 @@ def get_coloured_hands (hand:list) -> dict:
     
     return coloured_cards
 
-def get_scored_cards( connections, playable_cards) -> dict:
+def get_scored_cards( connections, playable_cards, current_card) -> dict:
     # note chaque carte et l'ajoute dans un dictionnaire:
     # key: card , value: score
     # comment on calcule le score:
@@ -50,8 +50,15 @@ def get_scored_cards( connections, playable_cards) -> dict:
     
     for card in playable_cards:
         score = 0
+        # on -1 si c'est c'es la même couleur que la carte de la pioche
+        if card.color == current_card.color:
+            score -= 1
         # on ajoute au score le nombre de connection que la carte a
         score += len(connections[card])
+        
+        if card.value in [">>", "<>", "+2"]:
+            score +=0.5
+        
         # si la carte est un + on ajoute 1 au score
         if "+" in card.value:
             score += 1
@@ -64,7 +71,7 @@ def get_scored_cards( connections, playable_cards) -> dict:
 
 def make_decision(hand:list, is_attacked:bool, current_card:str):
     cards_in_hand = hand #récupère la main de l'IA
-    #print("in make decisions", cards_in_hand, is_attacked)
+    print("in make decisions", cards_in_hand, is_attacked)
     #cards_in_hand.sort()
     
     # récupère les colors unique de la main
@@ -93,7 +100,7 @@ def make_decision(hand:list, is_attacked:bool, current_card:str):
         return playable_cards[0]
     # Sinon calculer la value de chaque carte, et jouer celle qui a le moins de value
     else:
-        attractiveness = get_scored_cards(connections, playable_cards)
+        attractiveness = get_scored_cards(connections, playable_cards, current_card)
         selected_card = min(attractiveness, key= attractiveness.get)
         return selected_card
     
