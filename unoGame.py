@@ -112,6 +112,7 @@ def main_game():
         current_player = players[current_player_index]
 
         if not isinstance(current_player, AIPlayer):
+            
             current_player_index, reverse_order, stacked , move_completed= handle_human_turn(
                 current_player, discard_pile, deck, screen, positions, current_player_index, reverse_order, stacked,ai,d_rect,players
             )

@@ -78,6 +78,8 @@ class AIPlayer(Player):
         self.is_attacked =0
     def decide_move(self, top_card, is_attacked):
         valid_moves = self.valid_moves(top_card)
+        if not valid_moves:
+            return None
         if self.difficulty == "easy":
             return random.choice(valid_moves)
         elif self.difficulty == "medium":
@@ -91,6 +93,7 @@ class AIPlayer(Player):
         elif self.difficulty == "hard":
             best_move =make_decision(self.hand, is_attacked, top_card)
             return best_move
+        return None
 # Gameplay Functions
 def display_game_state(players, discard_pile, current_player):
     print(f"\nTop card: {discard_pile.top_card}")
