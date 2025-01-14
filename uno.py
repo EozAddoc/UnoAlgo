@@ -146,7 +146,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
                 player.draw(deck)
             stacked = 0  
         elif choice == "draw":
-            drawn = player.draw(deck)
+            player.draw(deck)
             valid_moves = player.valid_moves(discard_pile.top_card)
             if player.hand[-1] in valid_moves:
                 print(f"Your drawn card {player.hand[-1]} is valid! Would you like to play it? (y/n)")
@@ -161,6 +161,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
                     print("You chose not to play the drawn card.")
         else:
             card = next((card for card in valid_moves if str(card) == choice), None)
+            print(card)
             if card:
                 player.play(card, discard_pile)
                 current_player_index, reverse_order, stacked = handle_special_cards(
@@ -172,23 +173,25 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
     return current_player_index, reverse_order, stacked
 def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai):
     if card.value == ">>":  # Skip
-        print(f"{card} played 'Skip'. Skipping next player's turn.")
+        print(f"{ players[current_player_index].name} played 'Skip'. Skipping next player's turn.")
         step = -1 if reverse_order else 1
         current_player_index = (current_player_index + step) % len(players)
     elif card.value == "<>": 
         if len(players) == 2:
-            print(f"{card} played 'Skip'. Skipping next player's turn.")
+            print(f"{players[current_player_index].name} played 'Skip'. Skipping next player's turn.")
             step = -1 if reverse_order else 1
             current_player_index = (current_player_index + step) % len(players)
         else:
             reverse_order = not reverse_order
-            print(f"{card} played 'Reverse'. Turn order reversed.")
+            print(f"{players[current_player_index].name} played 'Reverse'. Turn order reversed.")
     elif card.value == "+2": 
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]
-        print(f" played '+2'")
+        print(f" {players[current_player_index].name} played '+2'")
         stacked += 2
     elif card.value == "+4":  
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]
+        print(f" {players[current_player_index].name} played '+4'")
+
         stacked += 4
         print(stacked)
         choose_color(card, discard_pile,ai, players[current_player_index])
@@ -212,7 +215,7 @@ def choose_color(card, discard_pile,ai, current_player):
             new_color = input("Choose a color: ").upper()
     card.color = new_color
     discard_pile.new_card(card)
-    print(f"Color changed to {new_color}.")
+    print(f"{current_player.name} Color changed to {new_color}.")
     
 def choose_number_of_players():
     # Ask the user how many players and what type

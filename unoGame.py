@@ -3,6 +3,7 @@ from settings import *
 from unoPlayers import *
 from unoCard import *
 from uno import *
+from unoHandleTurn import *
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -52,7 +53,9 @@ def display_discard_pile(discard_pile, screen):
         
         pygame.draw.rect(screen, (100, 100, 100), (rect_x, rect_y, rect_width, rect_height), border_radius=10)
         pygame.draw.rect(screen, BLACK, (rect_x, rect_y, rect_width, rect_height), width=2, border_radius=10)
-
+        
+        rect = pygame.Rect(rect_x, rect_y, rect_width, rect_height)
+        return rect
         
            
 
@@ -78,13 +81,13 @@ def position_other_players(num_players):
     
     return positions
 
+
 def main_game():
     show_initial_screen()
-    num_players = ask_number_of_players(screen, clock)  # Ensure this function is defined
-    player_types = ask_type_of_players(num_players, screen, clock)  # Ensure this function is defined
-    players = create_playerz(player_types, num_players, screen, clock)  # Ensure create_players is updated for this signature
+    num_players = ask_number_of_players(screen, clock)
+    player_types = ask_type_of_players(num_players, screen, clock)
+    players = create_playerz(player_types, num_players, screen, clock)
 
-    print(players[0], player_types, num_players, players, num_players, len(players))
     deck = Deck()
     deck.shuffle()
     discard_pile = DiscardPile(deck)
@@ -94,24 +97,35 @@ def main_game():
         player.draw(deck, 7)
 
     positions = position_other_players(num_players)
-    print(positions, positions[0])
     running = True
+    reverse_order = False
+    stacked = 0
+    ai=False
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
         screen.fill(LIGHT_BLUE)
-
-        display_discard_pile(discard_pile, screen)
+        d_rect = display_discard_pile(discard_pile, screen)
         current_player = players[current_player_index]
-        if not isinstance(current_player, AIPlayer):
-            display_hand(current_player, screen, positions[current_player_index], discard_pile, is_ai=False, rotate=False)
-        
-        # handle turn logic
-        # handle game end conditions
 
-        # update screen with new state and wait for input
+        if not isinstance(current_player, AIPlayer):
+            current_player_index, reverse_order, stacked , move_completed= handle_human_turn(
+                current_player, discard_pile, deck, screen, positions, current_player_index, reverse_order, stacked,ai,d_rect,players
+            )
+            print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
+            if move_completed:
+                step = -1 if reverse_order else 1
+                current_player_index = (current_player_index + step) % len(players)
+        else:
+            current_player_index, reverse_order, stacked = handle_ai_turn(current_player, discard_pile, deck, stacked,players,current_player_index,reverse_order,ai)
+            print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
+            step = -1 if reverse_order else 1
+            current_player_index = (current_player_index + step) % len(players)
+
+        # Display other players' hands
         for i, p in enumerate(players[1:], start=1):  
             if len(players) == 3:
                 display_hand(p, screen, positions[i],discard_pile ,is_ai=True, rotate=True)
@@ -122,6 +136,15 @@ def main_game():
                     display_hand(p, screen, positions[i],discard_pile, is_ai=True, rotate=False)
             else:
                 display_hand(p, screen, positions[i],discard_pile, is_ai=True, rotate=False)
+
+        # Check if the current player has won
+        if len(current_player.hand) == 0:
+            print(f"{current_player.name} wins!")
+            break
+
+        # Update the current player index
+        
+
         pygame.display.flip()
         clock.tick(60)
 

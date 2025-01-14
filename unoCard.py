@@ -61,12 +61,14 @@ def draw_card(screen, card, x, y,  is_ai=False, rotate=False,valid=False):
         card_surface = pygame.transform.rotate(card_surface, 90)
    
     screen.blit(card_surface, (x, y))
+    return card_surface.get_rect(topleft=(x, y))
 
 
 
 def draw_hand(screen, player, start_x, start_y,discard_pile, is_ai=False, rotate=True):
     spacing = SCREEN_WIDTH * 0.12  
     valid_moves = player.valid_moves(discard_pile.top_card)
+    card_rects = []
     if not rotate : 
         if is_ai:
             for i, card in enumerate(player.hand):
@@ -74,19 +76,22 @@ def draw_hand(screen, player, start_x, start_y,discard_pile, is_ai=False, rotate
         else:
             for i, card in enumerate(player.hand):
                 if card in valid_moves:
-                    draw_card(screen, card, start_x + i * spacing, start_y, is_ai,rotate, valid=True)
+                    x=draw_card(screen, card, start_x + i * spacing, start_y, is_ai,rotate, valid=True)
+                    card_rects.append(x)
                 else:
-                    draw_card(screen, card, start_x + i * spacing, start_y, is_ai,rotate, valid=False)
+                    x=draw_card(screen, card, start_x + i * spacing, start_y, is_ai,rotate, valid=False)
+                    card_rects.append(x)
     else:
         for i, card in enumerate(player.hand):
             draw_card(screen, card, start_x, start_y + i *SCREEN_WIDTH * 0.04 ,  is_ai,rotate,valid=False)
+    return card_rects
+
+
 
     
 
 def display_hand(player, screen, position,discard_pile, is_ai=False, rotate=True):
-    """Displays the player's hand (either cards or back of cards for AI players)."""
-
-    draw_hand(screen, player, position[0], position[1],discard_pile, is_ai, rotate)
+    return draw_hand(screen, player, position[0], position[1],discard_pile, is_ai, rotate)
 
 def display_discard_pile(discard_pile, screen):
     font = pygame.font.SysFont('Arial', 30)
