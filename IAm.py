@@ -71,7 +71,6 @@ def get_scored_cards( connections, playable_cards, current_card) -> dict:
 
 def make_decision(hand:list, is_attacked:bool, current_card:str):
     cards_in_hand = hand #récupère la main de l'IA
-    print("in make decisions", cards_in_hand, is_attacked)
     #cards_in_hand.sort()
     
     # récupère les colors unique de la main

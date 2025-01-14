@@ -22,7 +22,7 @@ def ask_number_of_players(screen, clock):
                     user_input += event.unicode
 
         # Clear the screen
-        screen.fill(WHITE)
+        screen.fill(LIGHT_BLUE)
 
         text_1 = FONT_MEDIUM.render("How many players?", True, BLACK)
         text_1_rect = text_1.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
@@ -103,7 +103,7 @@ def ask_type_of_players(num, screen, clock):
                         feedback_message = "Please choose both AI and Human players."
 
         # Clear the screen
-        screen.fill(WHITE)
+        screen.fill(LIGHT_BLUE)
 
         # Display the question with dynamic positioning
         text_1 = FONT_MEDIUM.render("How many of each player type?", True, BLACK)
@@ -171,7 +171,7 @@ def create_playerz(player_types, num, screen, clock):
     
     # Prompt for human player names
     while input_active:
-        screen.fill((255, 255, 255))
+        screen.fill(LIGHT_BLUE)
 
         # Player name input
         if player_counter ==0:
@@ -220,7 +220,7 @@ def create_playerz(player_types, num, screen, clock):
 
     # Now, ask for a single AI difficulty
     while ai_difficulty is None:
-        screen.fill((255, 255, 255))
+        screen.fill(LIGHT_BLUE)
 
         # Display difficulty options
         text_2 = font.render(f"Choose difficulty for AI players:", True, (0, 0, 0))
