@@ -378,7 +378,7 @@ def choose_color(card, discard_pile, ai, current_player):
     Returns:
     None: Modifie directement l'objet `card` en fonction de la couleur choisie et met à jour la pile de défausse.
     """
-    if ai:
+    if isinstance(current_player, AIPlayer):
         coloured_cards = get_coloured_hands(current_player.hand)
         num_all_colours = len(coloured_cards)
         pair = list(coloured_cards.items())

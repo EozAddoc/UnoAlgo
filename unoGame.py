@@ -51,8 +51,18 @@ def display_discard_pile(discard_pile, screen):
         rect_width = SCREEN_WIDTH * 0.1
         rect_height =SCREEN_HEIGHT * 0.18
         
-        pygame.draw.rect(screen, (100, 100, 100), (rect_x, rect_y, rect_width, rect_height), border_radius=10)
-        pygame.draw.rect(screen, BLACK, (rect_x, rect_y, rect_width, rect_height), width=2, border_radius=10)
+        pygame.draw.rect(screen, BLACK, (rect_x, rect_y, rect_width, rect_height), border_radius=10)
+        pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_width, rect_height), width=8, border_radius=10)
+        oval_width, oval_height = rect_width *0.8  , rect_height * 0.7 
+        oval_x = rect_x 
+        oval_y = rect_y 
+
+        # Load and scale the logo image
+        logo = pygame.image.load('logo.png')  # Replace with your actual path
+        scaled_logo = pygame.transform.scale(logo, (int(oval_width * 0.95), int(oval_height * 0.95)))  # Scale logo to fit in the ellipse
+    
+        logo_rect = scaled_logo.get_rect(center=(rect_x + rect_width // 2, rect_y + rect_height // 2))
+        screen.blit(scaled_logo, logo_rect.topleft)
         
         rect = pygame.Rect(rect_x, rect_y, rect_width, rect_height)
         return rect
@@ -112,12 +122,11 @@ def main_game():
         current_player = players[current_player_index]
 
         if not isinstance(current_player, AIPlayer):
-            
             current_player_index, reverse_order, stacked , move_completed= handle_human_turn(
                 current_player, discard_pile, deck, screen, positions, current_player_index, reverse_order, stacked,ai,d_rect,players
             )
-            print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
             if move_completed:
+                print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
                 step = -1 if reverse_order else 1
                 current_player_index = (current_player_index + step) % len(players)
         else:

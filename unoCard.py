@@ -15,8 +15,30 @@ def draw_card(screen, card, x, y,  is_ai=False, rotate=False,valid=False):
     card_surface = pygame.Surface((card_width, card_height), pygame.SRCALPHA)
 
     if is_ai:
-        pygame.draw.rect(card_surface, (100, 100, 100), (0, 0, card_width, card_height ), border_radius=10)
-        pygame.draw.rect(card_surface, BLACK, (0, 0, card_width,card_height ), width=2, border_radius=10)
+        pygame.draw.rect(card_surface, BLACK, (0, 0, card_width, card_height ), border_radius=10)
+        pygame.draw.rect(card_surface, WHITE, (0, 0, card_width,card_height ), width=8, border_radius=10)
+        oval_width, oval_height = card_width * 0.7, card_height * 0.9
+        oval_x = (card_width - oval_width) // 2
+        oval_y = (card_height - oval_height) // 2
+        ellipse_surface = pygame.Surface((card_width, card_height), pygame.SRCALPHA)
+        pygame.draw.ellipse(ellipse_surface, RED, (oval_x, oval_y, oval_width, oval_height))
+        # Load and scale the logo image
+        logo = pygame.image.load('logo.png')
+        
+        # Scale the PNG logo to fit inside the card (adjust size as needed)
+        scaled_png = pygame.transform.scale(logo, (int(card_width * 0.55), int(card_height * 0.55)))  # 50% width, 20% height
+
+        # Position the logo at the top center of the card
+        png_rect = scaled_png.get_rect(center=(card_width // 2, card_height // 2))  # Top part of the card
+
+        # Rotate the ellipse only
+        rotated_ellipse = pygame.transform.rotate(ellipse_surface, -35)  # Rotate by -35 degrees
+        rotated_rect = rotated_ellipse.get_rect(center=(card_width // 2, card_height // 2))
+
+        card_surface.blit(rotated_ellipse, rotated_rect.topleft)
+
+        card_surface.blit(scaled_png, png_rect.topleft)
+
     else:
         card_color = color_map.get(card.color, BLACK)
         pygame.draw.rect(card_surface, card_color, (0, 0, card_width, card_height), border_radius=10)
