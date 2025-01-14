@@ -229,15 +229,15 @@ def create_playerz(player_types, num, screen, clock):
 
         # Difficulty options (Easy, Medium, Hard)
         easy_text = font.render("Easy", True, (0, 0, 0))
-        screen.blit(easy_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 -100))
-        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 -100, 200, 50), 2)
+        screen.blit(easy_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 100))
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 100, 200, 50), 2)
 
         medium_text = font.render("Medium", True, (0, 0, 0))
-        screen.blit(medium_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 -50))
-        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 -50, 200, 50), 2)
+        screen.blit(medium_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50))
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50, 200, 50), 2)
 
         hard_text = font.render("Hard", True, (0, 0, 0))
-        screen.blit(hard_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 ))
+        screen.blit(hard_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2))
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50), 2)
 
         # Handle events
@@ -254,9 +254,14 @@ def create_playerz(player_types, num, screen, clock):
                     ai_difficulty = "medium"
                 elif pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 , 200, 50).collidepoint(mouse_pos):
                     ai_difficulty = "hard"
-        ai_counter = 1
-        for _ in range (player_types['ai']):
-            players.append(AIPlayer(f"AI {ai_counter}", difficulty=ai_difficulty))
 
-        return players
- 
+        pygame.display.flip()
+        clock.tick(60)
+
+    # Add AI players with the selected difficulty
+    ai_counter = 1
+    for _ in range(player_types['ai']):
+        players.append(AIPlayer(f"AI {ai_counter}", difficulty=ai_difficulty))
+        ai_counter += 1
+
+    return players

@@ -3,7 +3,7 @@ from settings import *
 from uno import *
 
 def draw_card(screen, card, x, y,  is_ai=False, rotate=False):
-    card_width, card_height = SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.15
+    card_width, card_height = SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.18
     color_map = {
         "R": (255, 0, 0),
         "G": (0, 255, 0),
@@ -22,11 +22,33 @@ def draw_card(screen, card, x, y,  is_ai=False, rotate=False):
         pygame.draw.rect(card_surface, card_color, (0, 0, card_width, card_height), border_radius=10)
         pygame.draw.rect(card_surface, BLACK, (0, 0, card_width, card_height), width=2, border_radius=10)
 
+        oval_width, oval_height = card_width * 0.8, card_height * 0.6
+        oval_x = (card_width - oval_width) // 2
+        oval_y = (card_height - oval_height) // 2
+        ellipse_surface = pygame.Surface((card_width, card_height), pygame.SRCALPHA)
+        pygame.draw.ellipse(ellipse_surface, WHITE, (oval_x, oval_y, oval_width, oval_height))
+
+
+        rotated_ellipse = pygame.transform.rotate(ellipse_surface, 15)  
+        rotated_rect = rotated_ellipse.get_rect(center=(card_width // 2, card_height // 2))
+        card_surface.blit(rotated_ellipse, rotated_rect.topleft)
+
         font_size = int(SCREEN_HEIGHT * 0.05)
         font = pygame.font.Font(None, font_size)
-        text = font.render(card.value, True, BLACK)
-        text_rect = text.get_rect(center=(card_width // 2, card_height // 2))
-        card_surface.blit(text, text_rect)
+
+        text_top_left = font.render(card.value, True, BLACK)
+        text_top_left_rect = text_top_left.get_rect(topleft=( 10,  10))  
+        card_surface.blit(text_top_left, text_top_left_rect)
+
+        # Render the text for the center
+        text_center = font.render(card.value, True, card_color)
+        text_center_rect = text_center.get_rect(center=(card_width // 2, card_height // 2))
+        card_surface.blit(text_center, text_center_rect)
+
+
+        text_bottom_right = font.render(card.value, True, BLACK)
+        text_bottom_right_rect = text_bottom_right.get_rect(bottomright=(card_width - 10, card_height - 10)) 
+        card_surface.blit(text_bottom_right, text_bottom_right_rect)
     if rotate:
         card_surface = pygame.transform.rotate(card_surface, 90)
    

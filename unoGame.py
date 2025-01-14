@@ -18,7 +18,7 @@ def show_initial_screen():
                 pygame.quit()
                 exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if 350 <= event.pos[0] <= 450 and 300 <= event.pos[1] <= 350:
+                if (SCREEN_WIDTH// 2) - 50 <= event.pos[0] <= (SCREEN_WIDTH// 2) +50 and SCREEN_HEIGHT//1.35 -25 <= event.pos[1] <= SCREEN_HEIGHT//1.35 -25 +25:
                     return  
 
         screen.fill(WHITE)
@@ -26,9 +26,9 @@ def show_initial_screen():
         uno_text_start_rect = uno_text_start.get_rect(center=(SCREEN_WIDTH // 2, 200))
         screen.blit(uno_text_start, uno_text_start_rect)
 
-        pygame.draw.rect(screen, BLUE, (350, 300, 100, 50))
+        pygame.draw.rect(screen, BLUE, (SCREEN_WIDTH//4, SCREEN_HEIGHT//1.5, SCREEN_WIDTH//2, SCREEN_WIDTH//10))
         text_play = FONT_MEDIUM.render("Play", True, WHITE)
-        text_play_rect = text_play.get_rect(center=(400, 325))
+        text_play_rect = text_play.get_rect(center=(SCREEN_WIDTH// 2, SCREEN_HEIGHT//1.35))
         screen.blit(text_play, text_play_rect)
 
         pygame.display.flip()
@@ -106,7 +106,7 @@ def main_game():
 
         display_hand(players[0], screen, positions[0],is_ai=False, rotate=False)
         for i, p in enumerate(players[1:], start=1):  
-            if len(players) == 2:
+            if len(players) == 3:
                 display_hand(p, screen, positions[i], is_ai=True, rotate=True)
             elif len(players) == 4:
                 if i == 2 or i == 3: 
