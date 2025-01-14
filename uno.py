@@ -54,7 +54,7 @@ class Player:
             card = deck.draw()
             if card:
                 self.hand.append(card)
-                return card
+                
     def play(self, card, discard_pile):
         if card in self.hand:
             self.hand.remove(card)
@@ -116,13 +116,13 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
         else:
             print(f"{player.name} draws cards due to stack!")
             if stacked == 0:
-                drawn = player.draw(deck)
+                player.draw(deck)
                 valid_moves = player.valid_moves(discard_pile.top_card)
-                if drawn in valid_moves:
-                    print(f"AI drew a valid card: {drawn}. AI plays it.")
-                    player.play(drawn, discard_pile)
+                if player.hand[-1] in valid_moves:
+                    print(f"AI drew a valid card: {player.hand[-1]}. AI plays it.")
+                    player.play(player.hand[-1], discard_pile)
                     current_player_index, reverse_order, stacked = handle_special_cards(
-                        drawn, players, current_player_index, reverse_order, discard_pile, deck, stacked, ai
+                        player.hand[-1], players, current_player_index, reverse_order, discard_pile, deck, stacked, ai
                     )
             for _ in range(stacked):
                 player.draw(deck)
@@ -148,13 +148,13 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
         elif choice == "draw":
             drawn = player.draw(deck)
             valid_moves = player.valid_moves(discard_pile.top_card)
-            if drawn in valid_moves:
-                print(f"Your drawn card {drawn} is valid! Would you like to play it? (y/n)")
+            if player.hand[-1] in valid_moves:
+                print(f"Your drawn card {player.hand[-1]} is valid! Would you like to play it? (y/n)")
                 play_choice = input().lower()
                 if play_choice == "y":
-                    player.play(drawn, discard_pile)
+                    player.play(player.hand[-1], discard_pile)
                     current_player_index, reverse_order, stacked = handle_special_cards(
-                    drawn, players, current_player_index, reverse_order, discard_pile, deck, stacked, ai
+                    player.hand[-1], players, current_player_index, reverse_order, discard_pile, deck, stacked, ai
                 )
                     print(stacked, "after drawn")
                 else:
