@@ -483,6 +483,14 @@ def play_game():
     while True:
         current_player = players[current_player_index]
         display_game_state(players, discard_pile, current_player)
+        if len(current_player.hand) == 1:  
+            if isinstance(current_player, AIPlayer):
+                print(f"{current_player.name} calls UNO.")
+            else:
+                uno = input("You have one card left! Type 'UNO' to call it: ").lower()
+                if uno != 'uno':
+                    print(f"{current_player.name} didn't call 'UNO'! You draw 2 penalty cards.")
+                    current_player.draw(deck, 2)  
 
         # Vérification si un joueur a gagné
         if len(current_player.hand) == 0:
