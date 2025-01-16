@@ -31,6 +31,7 @@ def handle_human_turn(current_player, discard_pile, deck, screen, positions, cur
                         for _ in range(stacked):
                             current_player.draw(deck)
                         stacked = 0  
+                        move_completed = True
                         return current_player_index, reverse_order, stacked, move_completed
 
                     else:
@@ -60,13 +61,21 @@ def handle_ai_turn(current_player, discard_pile, deck, stacked,players,current_p
 
     else:
         if stacked == 0:
+            x = len(current_player.hand)
             current_player.draw(deck)
+            y= len(current_player.hand)
+
+            """print(current_player.hand, current_player.hand[-1],x,y)
             valid_moves = current_player.valid_moves(discard_pile.top_card)
-            if current_player.hand[-1] in valid_moves:
+            if current_player.hand[-1] in valid_moves and x <y:
+                print("the redraw case ")
                 current_player.play(current_player.hand[-1], discard_pile)
                 current_player_index, reverse_order, stacked = handle_special_cards(
                     current_player.hand[-1], players, current_player_index, reverse_order, discard_pile, deck, stacked,ai
                 )
+                print(f"current player {current_player.name} played {move} and hand is {current_player.hand}")
+                return current_player_index, reverse_order, stacked"""
+
         for _ in range(stacked):
             current_player.draw(deck)
             print(f"current player {current_player.name} drew new hand is {current_player.hand}")

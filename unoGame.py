@@ -57,9 +57,8 @@ def display_discard_pile(discard_pile, screen):
         oval_x = rect_x 
         oval_y = rect_y 
 
-        # Load and scale the logo image
-        logo = pygame.image.load('logo.png')  # Replace with your actual path
-        scaled_logo = pygame.transform.scale(logo, (int(oval_width * 0.95), int(oval_height * 0.95)))  # Scale logo to fit in the ellipse
+        logo = pygame.image.load('logo.png')  
+        scaled_logo = pygame.transform.scale(logo, (int(oval_width * 0.95), int(oval_height * 0.95)))  
     
         logo_rect = scaled_logo.get_rect(center=(rect_x + rect_width // 2, rect_y + rect_height // 2))
         screen.blit(scaled_logo, logo_rect.topleft)
@@ -120,10 +119,13 @@ def main_game():
         screen.fill(LIGHT_BLUE)
         d_rect = display_discard_pile(discard_pile, screen)
         current_player = players[current_player_index]
-        # Display the active stack message in the top-right corner
+        name_text = FONT_MEDIUM.render(f"Current player: {current_player.name}", True, BLACK)
+        name_rect = name_text.get_rect(topleft=(10, 10))  
+        screen.blit(name_text, name_rect)
+
         if stacked > 0:
             active_stack_text = FONT_MEDIUM.render(f"Active stack: {stacked} cards.", True, BLACK)
-            active_stack_rect = active_stack_text.get_rect(topright=(SCREEN_WIDTH - 10, 10))  # Top-right corner with padding
+            active_stack_rect = active_stack_text.get_rect(topright=(SCREEN_WIDTH - 10, 10))  
             screen.blit(active_stack_text, active_stack_rect)
 
 

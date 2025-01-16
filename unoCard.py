@@ -95,7 +95,7 @@ def draw_hand(screen, player, start_x, start_y,discard_pile, is_ai=False, rotate
     max_cards = 7 
     hand_size = len(player.hand)
     if hand_size > 8:
-        spacingOthers = 0.6
+        spacingOthers = 0.03
     if not rotate : 
         if is_ai:
             for i, card in enumerate(player.hand):

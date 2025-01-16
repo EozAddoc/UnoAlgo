@@ -381,6 +381,7 @@ def choose_color(card, discard_pile, ai, current_player):
     None: Modifie directement l'objet `card` en fonction de la couleur choisie et met à jour la pile de défausse.
     """
     print("in choose color",current_player.name)
+    new_color="Y"
     if isinstance(current_player, AIPlayer):
         if(current_player.difficulty =="hard"):
             coloured_cards = get_coloured_hands(current_player.hand)
@@ -391,11 +392,14 @@ def choose_color(card, discard_pile, ai, current_player):
                 if len(pair[max_index][1]) < len(pair[i][1]):
                     max_index = i
             new_color = pair[max_index][0]
+            print("AI chose", new_color)
     else:
         new_color = input("Choose a color (R, B, G, Y): ").upper()
         while new_color not in ["R", "B", "G", "Y"]:
             print("Invalid color. Choose from R, B, G, Y.")
             new_color = input("Choose a color: ").upper()
+    if new_color not in ["R", "B", "G", "Y"]:
+        new_color="Y"
     card.color = new_color
     discard_pile.new_card(card)
     print(f"{current_player.name} Color changed to {new_color}.")
