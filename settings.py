@@ -2,7 +2,7 @@
 
 # Screen settings
 SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 900
+SCREEN_HEIGHT = 850
 
 # Colors
 WHITE = (255, 255, 255)

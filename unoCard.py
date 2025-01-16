@@ -17,7 +17,7 @@ def draw_card(screen, card, x, y,  is_ai=False, rotate=False,valid=False):
     if is_ai:
         pygame.draw.rect(card_surface, BLACK, (0, 0, card_width, card_height ), border_radius=10)
         pygame.draw.rect(card_surface, WHITE, (0, 0, card_width,card_height ), width=8, border_radius=10)
-        oval_width, oval_height = card_width * 0.7, card_height * 0.9
+        oval_width, oval_height = card_width * 0.7, card_height * 0.8
         oval_x = (card_width - oval_width) // 2
         oval_y = (card_height - oval_height) // 2
         ellipse_surface = pygame.Surface((card_width, card_height), pygame.SRCALPHA)
@@ -88,13 +88,18 @@ def draw_card(screen, card, x, y,  is_ai=False, rotate=False,valid=False):
 
 
 def draw_hand(screen, player, start_x, start_y,discard_pile, is_ai=False, rotate=True):
-    spacing = SCREEN_WIDTH * 0.12  
+    spacing = SCREEN_WIDTH * 0.12 
+    spacingOthers =0.03
     valid_moves = player.valid_moves(discard_pile.top_card)
     card_rects = []
+    max_cards = 7 
+    hand_size = len(player.hand)
+    if hand_size > 8:
+        spacingOthers = 0.6
     if not rotate : 
         if is_ai:
             for i, card in enumerate(player.hand):
-                draw_card(screen, card, start_x + i * SCREEN_WIDTH * 0.04, start_y, is_ai,rotate)
+                draw_card(screen, card, start_x + i * SCREEN_WIDTH * spacingOthers, start_y, is_ai,rotate)
         else:
             for i, card in enumerate(player.hand):
                 if card in valid_moves:
@@ -105,7 +110,7 @@ def draw_hand(screen, player, start_x, start_y,discard_pile, is_ai=False, rotate
                     card_rects.append(x)
     else:
         for i, card in enumerate(player.hand):
-            draw_card(screen, card, start_x, start_y + i *SCREEN_WIDTH * 0.04 ,  is_ai,rotate,valid=False)
+            draw_card(screen, card, start_x, start_y + i *SCREEN_WIDTH * spacingOthers ,  is_ai,rotate,valid=False)
     return card_rects
 
 

@@ -265,8 +265,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
     Returns:
     tuple: L'index du prochain joueur, l'état de l'ordre des tours, et le nombre de cartes empilées.
     """
-    # Gestion du tour pour les IA et les joueurs humains.
-    pass  # Reste du code pour gérer les tours
+   
     print(f"Active stack: {stacked} cards." if stacked > 0 else "")
     #ai
     if isinstance(player, AIPlayer):
@@ -338,6 +337,8 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
                 print("Invalid choice. Try again.")
                 current_player_index, reverse_order, stacked = handle_turn(player, discard_pile, deck, players, current_player_index, reverse_order, stacked,ai)
     return current_player_index, reverse_order, stacked
+
+
 def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai):
     if card.value == ">>":  # Skip
         print(f"{ players[current_player_index].name} played 'Skip'. Skipping next player's turn.")
@@ -358,13 +359,14 @@ def handle_special_cards(card, players, current_player_index, reverse_order, dis
     elif card.value == "+4":  
         next_player = players[(current_player_index + (1 if not reverse_order else -1)) % len(players)]
         print(f" {players[current_player_index].name} played '+4'")
-
         stacked += 4
         print(stacked)
         choose_color(card, discard_pile,ai, players[current_player_index])
     elif card.color == "W":  
+        print("played W")
         choose_color(card, discard_pile,ai, players[current_player_index] )
     return current_player_index, reverse_order, stacked
+
 def choose_color(card, discard_pile, ai, current_player):
     """
     Permet de choisir la couleur d'une carte 'Wild' ou '+4'. Si c'est un joueur IA, la couleur sera choisie automatiquement.
@@ -378,21 +380,22 @@ def choose_color(card, discard_pile, ai, current_player):
     Returns:
     None: Modifie directement l'objet `card` en fonction de la couleur choisie et met à jour la pile de défausse.
     """
+    print("in choose color",current_player.name)
     if isinstance(current_player, AIPlayer):
-        coloured_cards = get_coloured_hands(current_player.hand)
-        num_all_colours = len(coloured_cards)
-        pair = list(coloured_cards.items())
-        max_index = 0
-        for i in range(num_all_colours):
-            if len(pair[max_index][1]) < len(pair[i][1]):
-                max_index = i
-        new_color = pair[max_index][0]
+        if(current_player.difficulty =="hard"):
+            coloured_cards = get_coloured_hands(current_player.hand)
+            num_all_colours = len(coloured_cards)
+            pair = list(coloured_cards.items())
+            max_index = 0
+            for i in range(num_all_colours):
+                if len(pair[max_index][1]) < len(pair[i][1]):
+                    max_index = i
+            new_color = pair[max_index][0]
     else:
         new_color = input("Choose a color (R, B, G, Y): ").upper()
         while new_color not in ["R", "B", "G", "Y"]:
             print("Invalid color. Choose from R, B, G, Y.")
             new_color = input("Choose a color: ").upper()
-    
     card.color = new_color
     discard_pile.new_card(card)
     print(f"{current_player.name} Color changed to {new_color}.")

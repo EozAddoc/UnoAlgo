@@ -228,15 +228,15 @@ def create_playerz(player_types, num, screen, clock):
         screen.blit(text_2, text_2_rect)
 
         # Difficulty options (Easy, Medium, Hard)
-        easy_text = font.render("Easy", True, (0, 0, 0))
+        easy_text = font.render("easy", True, (0, 0, 0))
         screen.blit(easy_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 100))
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 100, 200, 50), 2)
 
-        medium_text = font.render("Medium", True, (0, 0, 0))
+        medium_text = font.render("medium", True, (0, 0, 0))
         screen.blit(medium_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50))
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2 - 50, 200, 50), 2)
 
-        hard_text = font.render("Hard", True, (0, 0, 0))
+        hard_text = font.render("hard", True, (0, 0, 0))
         screen.blit(hard_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2))
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, 200, 50), 2)
 

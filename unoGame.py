@@ -120,20 +120,26 @@ def main_game():
         screen.fill(LIGHT_BLUE)
         d_rect = display_discard_pile(discard_pile, screen)
         current_player = players[current_player_index]
+        # Display the active stack message in the top-right corner
+        if stacked > 0:
+            active_stack_text = FONT_MEDIUM.render(f"Active stack: {stacked} cards.", True, BLACK)
+            active_stack_rect = active_stack_text.get_rect(topright=(SCREEN_WIDTH - 10, 10))  # Top-right corner with padding
+            screen.blit(active_stack_text, active_stack_rect)
+
 
         if not isinstance(current_player, AIPlayer):
             current_player_index, reverse_order, stacked , move_completed= handle_human_turn(
                 current_player, discard_pile, deck, screen, positions, current_player_index, reverse_order, stacked,ai,d_rect,players
             )
             if move_completed:
-                print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
                 step = -1 if reverse_order else 1
                 current_player_index = (current_player_index + step) % len(players)
         else:
-            current_player_index, reverse_order, stacked = handle_ai_turn(current_player, discard_pile, deck, stacked,players,current_player_index,reverse_order,ai)
-            print(f"current player {current_player.name}  has {len(current_player.hand), current_player.hand} in his hand")
+            current_player_index, reverse_order, stacked = handle_ai_turn(current_player, discard_pile, deck, stacked,players,current_player_index,reverse_order,ai,screen)
             step = -1 if reverse_order else 1
             current_player_index = (current_player_index + step) % len(players)
+
+
 
         # Display other players' hands
         for i, p in enumerate(players[1:], start=1):  
