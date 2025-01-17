@@ -135,9 +135,9 @@ def main_game():
                 mouse_pos = pygame.mouse.get_pos()
                 if uno_button_rect.collidepoint(mouse_pos):  
                     print("UNO! button pressed")
-                    if len(current_player.hand > 1):
+                    """if len(current_player.hand > 1):
                         print("oh noo")
-                        current_player.draw(deck)
+                        current_player.draw(deck)"""
         
 
         screen.fill(LIGHT_BLUE)

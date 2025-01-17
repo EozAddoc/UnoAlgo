@@ -271,7 +271,6 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
     if isinstance(player, AIPlayer):
         ai = True
         move = player.decide_move(discard_pile.top_card, (stacked > 0) )
-        print(move)
         if move and (stacked == 0 or move.value in ["+2", "+4"]):
             print(f"{player.name} plays {move}.")
             
@@ -327,7 +326,6 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
                     print("You chose not to play the drawn card.")
         else:
             card = next((card for card in valid_moves if str(card) == choice), None)
-            print(card)
             if card:
                 player.play(card, discard_pile)
                 current_player_index, reverse_order, stacked = handle_special_cards(
