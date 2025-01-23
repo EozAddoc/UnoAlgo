@@ -54,8 +54,6 @@ def display_discard_pile(discard_pile, screen):
         pygame.draw.rect(screen, BLACK, (rect_x, rect_y, rect_width, rect_height), border_radius=10)
         pygame.draw.rect(screen, WHITE, (rect_x, rect_y, rect_width, rect_height), width=8, border_radius=10)
         oval_width, oval_height = rect_width *0.8  , rect_height * 0.7 
-        oval_x = rect_x 
-        oval_y = rect_y 
 
         logo = pygame.image.load('logo.png')  
         scaled_logo = pygame.transform.scale(logo, (int(oval_width * 0.95), int(oval_height * 0.95)))  
@@ -69,25 +67,24 @@ def display_discard_pile(discard_pile, screen):
            
 
 
-def position_other_players(num_players):
+def position_other_players(num_players,ai_players, hum_players):
     """Positions the other players dynamically based on number of players."""
     positions = []
-
-    if num_players == 1:
+    print(num_players, ai_players, hum_players)
+    if ai_players == 1:
         positions.append((SCREEN_WIDTH // 10, SCREEN_HEIGHT - 170))   # Current players hand
         positions.append((SCREEN_WIDTH // 3, SCREEN_HEIGHT // 8)) 
     
-    elif num_players == 2:
+    elif ai_players == 2:
         positions.append((SCREEN_WIDTH // 10 ,  SCREEN_HEIGHT - 170))   # Current players hand
         positions.append((50, SCREEN_HEIGHT // 4 ))  
         positions.append((SCREEN_WIDTH-180, SCREEN_HEIGHT // 4))  
 
-    elif num_players == 3:
+    elif ai_players == 3:
         positions.append((SCREEN_WIDTH // 10 ,  SCREEN_HEIGHT - 170))   # Current players hand
         positions.append((SCREEN_WIDTH // 3, SCREEN_HEIGHT // 8 ))  
         positions.append((50, SCREEN_HEIGHT // 4))  
         positions.append((SCREEN_WIDTH - 180, SCREEN_HEIGHT // 4))  
-    
     return positions
 def show_uno_button(player):
     # Define the button properties
@@ -104,6 +101,15 @@ def show_uno_button(player):
     screen.blit(text, text_rect)
 
     return pygame.Rect(button_x, button_y, button_width, button_height)
+def check_uno_button(current_player,deck):
+    if len(current_player.hand) == 1:  
+            if isinstance(current_player, AIPlayer):
+                print(f"{current_player.name} calls UNO.")
+            else:
+                uno = input("You have one card left! Type 'UNO' to call it: ").lower()
+                if uno != 'uno':
+                    print(f"{current_player.name} didn't call 'UNO'! You draw 2 penalty cards.")
+                    current_player.draw(deck, 2)  
 
 
 def main_game():
@@ -112,7 +118,13 @@ def main_game():
     player_types = ask_type_of_players(num_players, screen, clock)
     players = create_playerz(player_types, num_players, screen, clock)
     ai_players = [player for player in players if isinstance(player, AIPlayer)]
-    print(ai_players,players)
+    hum_players = [player for player in players if not isinstance(player, AIPlayer)]
+    playersAndHum =[]
+    playersAndHum.append(hum_players)
+    playersAndHum.append(ai_players)
+
+
+    print(players,playersAndHum)
     deck = Deck()
     deck.shuffle()
     discard_pile = DiscardPile(deck)
@@ -121,7 +133,7 @@ def main_game():
     for player in players:
         player.draw(deck, 7)
 
-    positions = position_other_players(num_players)
+    positions = position_other_players(num_players,len(ai_players), len(hum_players))
     running = True
     reverse_order = False
     stacked = 0
@@ -143,23 +155,16 @@ def main_game():
         screen.fill(LIGHT_BLUE)
         d_rect = display_discard_pile(discard_pile, screen)
         current_player = players[current_player_index]
+
         name_text = FONT_MEDIUM.render(f"Current player: {current_player.name}", True, BLACK)
         name_rect = name_text.get_rect(topleft=(10, 10))  
         screen.blit(name_text, name_rect)
+        uno_button_rect = show_uno_button(current_player)
 
         if stacked > 0:
             active_stack_text = FONT_MEDIUM.render(f"Active stack: {stacked} cards.", True, BLACK)
             active_stack_rect = active_stack_text.get_rect(topright=(SCREEN_WIDTH - 10, 10))  
             screen.blit(active_stack_text, active_stack_rect)
-        if len(current_player.hand) == 1:  
-            if isinstance(current_player, AIPlayer):
-                print(f"{current_player.name} calls UNO.")
-            else:
-                uno = input("You have one card left! Type 'UNO' to call it: ").lower()
-                if uno != 'uno':
-                    print(f"{current_player.name} didn't call 'UNO'! You draw 2 penalty cards.")
-                    current_player.draw(deck, 2)  
-
 
         if not isinstance(current_player, AIPlayer):
             current_player_index, reverse_order, stacked , move_completed= handle_human_turn(
@@ -174,10 +179,9 @@ def main_game():
             step = -1 if reverse_order else 1
             current_player_index = (current_player_index + step) % len(players)
 
-        uno_button_rect = show_uno_button(player)
 
 
-        # Display other players' hands
+        # Display other AI players' hands
         for i, p in enumerate(players[1:], start=1):  
             if len(players) == 3:
                 display_hand(p, screen, positions[i],discard_pile ,is_ai=True, rotate=True)
@@ -193,8 +197,6 @@ def main_game():
         if len(current_player.hand) == 0:
             print(f"{current_player.name} wins!")
             break
-
-        # Update the current player index
         
 
         pygame.display.flip()
