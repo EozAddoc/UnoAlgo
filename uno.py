@@ -337,7 +337,23 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
     return current_player_index, reverse_order, stacked
 
 
-def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai):
+def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked, ai):
+    """
+    Gère les effets des cartes spéciales jouées par un joueur.
+
+    Parameters:
+    card (Card): La carte jouée par le joueur actuel.
+    players (list): La liste des joueurs.
+    current_player_index (int): L'index du joueur actuel.
+    reverse_order (bool): Indique si l'ordre des tours est inversé.
+    discard_pile (DiscardPile): La pile de défausse où les cartes jouées sont placées.
+    deck (Deck): Le deck de cartes restantes.
+    stacked (int): Nombre de cartes pénalité en attente.
+    ai (bool): Indique si le joueur actuel est une IA.
+
+    Returns:
+    tuple: L'index du prochain joueur, l'état de l'ordre des tours, et le nombre de cartes empilées.
+    """
     if card.value == ">>":  # Skip
         print(f"{ players[current_player_index].name} played 'Skip'. Skipping next player's turn.")
         step = -1 if reverse_order else 1
