@@ -2,11 +2,11 @@ import random
 from IAm import make_decision, get_coloured_hands
 
 # Card class
-class Card:
+class Card:#4
     """
     Représente une carte du jeu avec une couleur et une valeur.
     """
-    def __init__(self, color, value):
+    def __init__(self, color, value): #2
         """
         Initialise une carte avec sa couleur et sa valeur.
 
@@ -17,24 +17,24 @@ class Card:
         self.color = color
         self.value = value
 
-    def __str__(self):
+    def __str__(self):#1
         """
         Retourne une chaîne de caractères représentant la carte.
         """
         return f"{self.color} {self.value}"
 
-    def __repr__(self):
+    def __repr__(self):#1
         """
         Utilisé pour la conversion de l'objet en chaîne de caractères pour les représentations en liste ou debug.
         """
         return self.__str__()
 
 # Deck class
-class Deck:
+class Deck:#8 + 2n + 2n**2
     """
     Représente un jeu de cartes complet.
     """
-    def __init__(self):
+    def __init__(self):#3
         """
         Initialise le jeu de cartes avec les couleurs et valeurs possibles et crée le deck.
         """
@@ -42,7 +42,7 @@ class Deck:
         self.values = ["0"] + [str(i) for i in range(1, 10)] + [">>", "<>", "+2"]  # Valeurs des cartes
         self.cards = self._create_deck()  # Création du deck
 
-    def _create_deck(self):
+    def _create_deck(self):#2n**2 + 2n +2
         """
         Crée le deck de cartes en fonction des couleurs et des valeurs définies.
 
@@ -50,22 +50,22 @@ class Deck:
         list: Liste contenant toutes les cartes du deck.
         """
         deck = []
-        for color in self.colors:
+        for color in self.colors:#2n**2
             for value in self.values:
                 deck.append(Card(color, value))
                 deck.append(Card(color, value))  # Chaque carte apparaît 2 fois
-        for _ in range(4):
+        for _ in range(4):#2n
             deck.append(Card("W", "W"))  # Cartes "Wild"
             deck.append(Card("W", "+4"))  # Cartes "Wild +4"
         return deck
 
-    def shuffle(self):
+    def shuffle(self):#1
         """
         Mélange le deck de cartes.
         """
         random.shuffle(self.cards)
 
-    def draw(self):
+    def draw(self):#2
         """
         Pioche une carte du deck.
 
@@ -75,11 +75,11 @@ class Deck:
         return self.cards.pop() if self.cards else None
 
 # DiscardPile class
-class DiscardPile:
+class DiscardPile:#2n +7
     """
     Représente la pile de défausse, qui contient la carte du dessus.
     """
-    def __init__(self, deck):
+    def __init__(self, deck): # n+3
         """
         Initialise la pile de défausse avec une carte non spéciale tirée du deck.
 
@@ -89,7 +89,7 @@ class DiscardPile:
         self.top_card = self.draw_non_special_card(deck)
         self.pile = [self.top_card]  # La pile commence avec la carte du dessus
 
-    def draw_non_special_card(self, deck):
+    def draw_non_special_card(self, deck):#n+2
         """
         Pioche une carte du deck jusqu'à ce que ce ne soit pas une carte spéciale.
 
@@ -104,7 +104,7 @@ class DiscardPile:
             card = deck.draw()
         return card
 
-    def new_card(self, card):
+    def new_card(self, card):#2
         """
         Ajoute une nouvelle carte à la pile de défausse et met à jour la carte du dessus.
 
@@ -119,7 +119,7 @@ class Player:
     """
     Représente un joueur humain dans le jeu.
     """
-    def __init__(self, name):
+    def __init__(self, name):#2
         """
         Initialise un joueur avec un nom et une main vide.
 
@@ -129,7 +129,7 @@ class Player:
         self.name = name
         self.hand = []  # La main du joueur
 
-    def draw(self, deck, count=1):
+    def draw(self, deck, count=1):#3n
         """
         Pioche une ou plusieurs cartes du deck et les ajoute à la main du joueur.
 
@@ -142,7 +142,7 @@ class Player:
             if card:
                 self.hand.append(card)
 
-    def play(self, card, discard_pile):
+    def play(self, card, discard_pile):#5
         """
         Permet au joueur de jouer une carte depuis sa main.
 
@@ -159,7 +159,7 @@ class Player:
             return card
         return None
 
-    def valid_moves(self, top_card):
+    def valid_moves(self, top_card):#n +1
         """
         Retourne une liste des cartes valides que le joueur peut jouer.
 
@@ -171,7 +171,7 @@ class Player:
         """
         return [card for card in self.hand if self.is_valid_move(card, top_card)]
 
-    def is_valid_move(self, card, top_card):
+    def is_valid_move(self, card, top_card):#2
         """
         Vérifie si une carte peut être jouée sur la carte du dessus de la pile de défausse.
 
@@ -193,7 +193,7 @@ class AIPlayer(Player):
     """
     Représente un joueur contrôlé par l'IA.
     """
-    def __init__(self, name, difficulty="easy"):
+    def __init__(self, name, difficulty="easy"):#4
         """
         Initialise un joueur IA avec un nom, une main et une difficulté.
 
@@ -206,7 +206,7 @@ class AIPlayer(Player):
         self.turn_counter = 0
         self.is_attacked = 0
 
-    def decide_move(self, top_card, is_attacked):
+    def decide_move(self, top_card, is_attacked):#15 + n
         """
         Permet à l'IA de décider quelle carte jouer.
 
@@ -217,7 +217,7 @@ class AIPlayer(Player):
         Returns:
         Card or None: La carte choisie par l'IA, ou None si elle doit piocher.
         """
-        valid_moves = self.valid_moves(top_card)
+        valid_moves = self.valid_moves(top_card) #n+1
         if not valid_moves:
             return None
         if self.difficulty == "easy":
@@ -229,6 +229,7 @@ class AIPlayer(Player):
             else:
                 return make_decision(self.hand, is_attacked, top_card)
         elif self.difficulty == "hard":
+            print("in hard mode")
             return make_decision(self.hand, is_attacked, top_card)
         return None
 
@@ -337,7 +338,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
     return current_player_index, reverse_order, stacked
 
 
-def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai):
+def handle_special_cards(card, players, current_player_index, reverse_order, discard_pile, deck, stacked,ai): #54 +8n
     if card.value == ">>":  # Skip
         print(f"{ players[current_player_index].name} played 'Skip'. Skipping next player's turn.")
         step = -1 if reverse_order else 1
@@ -365,7 +366,7 @@ def handle_special_cards(card, players, current_player_index, reverse_order, dis
         choose_color(card, discard_pile,ai, players[current_player_index] )
     return current_player_index, reverse_order, stacked
 
-def choose_color(card, discard_pile, ai, current_player):
+def choose_color(card, discard_pile, ai, current_player):#16 + 4n 
     """
     Permet de choisir la couleur d'une carte 'Wild' ou '+4'. Si c'est un joueur IA, la couleur sera choisie automatiquement.
 
@@ -386,14 +387,14 @@ def choose_color(card, discard_pile, ai, current_player):
             num_all_colours = len(coloured_cards)
             pair = list(coloured_cards.items())
             max_index = 0
-            for i in range(num_all_colours):
+            for i in range(num_all_colours):#2n
                 if len(pair[max_index][1]) < len(pair[i][1]):
                     max_index = i
             new_color = pair[max_index][0]
             print("AI chose", new_color)
     else:
         new_color = input("Choose a color (R, B, G, Y): ").upper()
-        while new_color not in ["R", "B", "G", "Y"]:
+        while new_color not in ["R", "B", "G", "Y"]:#2n
             print("Invalid color. Choose from R, B, G, Y.")
             new_color = input("Choose a color: ").upper()
     if new_color not in ["R", "B", "G", "Y"]:
