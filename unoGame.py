@@ -116,18 +116,18 @@ def check_uno_button(current_player,deck): #7
                     print(f"{current_player.name} didn't call 'UNO'! You draw 2 penalty cards.") #1
                     current_player.draw(deck, 2)   #1
 
-def main_game(): #11n**4+111n**3+135n**2+196n+54
+def main_game(): #11n**4+115n**3+147n**2+203n+34
     show_initial_screen()  #6n**2 + 10n +1
     num_players = ask_number_of_players(screen, clock)#3 + 15n + 11n**2
     player_types = ask_type_of_players(num_players, screen, clock)  #12 + 33n + 28 n**2
-    players = create_playerz(player_types, num_players, screen, clock)#10 +32n + 26n**2
+    players = create_playerz(player_types, num_players, screen, clock)#10 +32n + 36n**2 +4n**3
     ai_players = [player for player in players if isinstance(player, AIPlayer)] #1
     hum_players = [player for player in players if not isinstance(player, AIPlayer)] #1
     playersAndHum =[] #1
     playersAndHum.append(hum_players) #1
     playersAndHum.append(ai_players) #1
  
-    deck = Deck() #1
+    deck = Deck() #8 + 2n + 2n**2 
     deck.shuffle() #1
     discard_pile = DiscardPile(deck) #1
     current_player_index = 0 #1
@@ -201,9 +201,9 @@ def main_game(): #11n**4+111n**3+135n**2+196n+54
     pygame.quit() #1
 
 if __name__ == "__main__": #1
-    main_game() #11n**4+111n**3+135n**2+196n+54
+    main_game() #11n**4+115n**3+147n**2+203n+34
 
-#Complexité est 11n**4+111n**3+135n**2+196n+54 donc O(n**4)
+#Complexité est #11n**4+115n**3+147n**2+203n+34 donc O(n**4)
 """
 UNO Game using Pygame
 

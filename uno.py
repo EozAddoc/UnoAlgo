@@ -30,7 +30,7 @@ class Card:#4
         return self.__str__()
 
 # Deck class
-class Deck:#8 + 2n + 2n**2
+class Deck:#8 + 2n + 2n**2 +ln(n)
     """
     Représente un jeu de cartes complet.
     """
@@ -115,7 +115,7 @@ class DiscardPile:#2n +7
         self.top_card = card
 
 # Player class
-class Player:
+class Player:#10+ 4n
     """
     Représente un joueur humain dans le jeu.
     """
@@ -189,7 +189,7 @@ class Player:
         )
 
 # AIPlayer class
-class AIPlayer(Player):
+class AIPlayer(Player):#19+n
     """
     Représente un joueur contrôlé par l'IA.
     """
@@ -314,7 +314,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
         elif choice == "draw":
             player.draw(deck)
             valid_moves = player.valid_moves(discard_pile.top_card)
-            if player.hand[-1] in valid_moves:
+            """if player.hand[-1] in valid_moves:
                 print(f"Your drawn card {player.hand[-1]} is valid! Would you like to play it? (y/n)")
                 play_choice = input().lower()
                 if play_choice == "y":
@@ -324,7 +324,7 @@ def handle_turn(player, discard_pile, deck, players, current_player_index, rever
                 )
                     print(stacked, "after drawn")
                 else:
-                    print("You chose not to play the drawn card.")
+                    print("You chose not to play the drawn card.")"""
         else:
             card = next((card for card in valid_moves if str(card) == choice), None)
             if card:

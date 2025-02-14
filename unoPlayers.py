@@ -172,7 +172,7 @@ def ask_type_of_players(num, screen, clock): #12 + 33n + 28 n**2
         pygame.display.flip() #1
         clock.tick(60) #1
  
-def create_playerz(player_types, num, screen, clock): #10 +32n + 26n**2
+def create_playerz(player_types, num, screen, clock): #10 +32n + 36n**2 +4n**3
     """
     Creates and manages the setup process for human and AI players in a Pygame-based game.
 
@@ -208,7 +208,7 @@ def create_playerz(player_types, num, screen, clock): #10 +32n + 26n**2
     feedback_message = "" #1
      
     # Prompt for human player names 
-    while input_active: #15n + 15 n **2
+    while input_active: #15n + 25 n **2 + 4n**3
         screen.fill(LIGHT_BLUE) #1
  
         # Player name input #1
@@ -231,7 +231,7 @@ def create_playerz(player_types, num, screen, clock): #10 +32n + 26n**2
             screen.blit(feedback_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 2 + 100)) #1
  
         # Handle events for typing name 
-        for event in pygame.event.get(): #15n
+        for event in pygame.event.get(): #25n + 4n**2
             if event.type == pygame.QUIT: #1
                 pygame.quit() #1
                 exit() #1
@@ -239,7 +239,7 @@ def create_playerz(player_types, num, screen, clock): #10 +32n + 26n**2
             elif event.type == pygame.KEYDOWN: #1
                 if event.key == pygame.K_RETURN: #1
                     if len(current_name) > 0: #1
-                        players.append(Player(current_name))   #1
+                        players.append(Player(current_name))   #10+4n
                         current_name = ""   #1
                         player_counter += 1 #1
                         if player_counter == player_types['hum'] + 1:   #1
@@ -299,7 +299,7 @@ def create_playerz(player_types, num, screen, clock): #10 +32n + 26n**2
     # Add AI players with the selected difficulty #1
     ai_counter = 1 #1
     for _ in range(player_types['ai']): #2n
-        players.append(AIPlayer(f"AI {ai_counter}", difficulty=ai_difficulty)) #1
+        players.append(AIPlayer(f"AI {ai_counter}", difficulty=ai_difficulty)) #19+n
         ai_counter += 1 #1
  
     return players #1
